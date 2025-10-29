@@ -1,0 +1,8 @@
+node_modules/
+.env
+.git
+public/*
+node_modules
+/node_modules
+# UPLOADS FILE IS NOT BE IGNORED INTENTIONALLY !
+# uploads/*
