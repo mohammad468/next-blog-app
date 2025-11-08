@@ -1,0 +1,92 @@
+"use client";
+
+import Button from "@/ui/Button";
+import RHFTextField from "@/ui/RHFTextField";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { signupAPI } from "@/services/authService";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+
+const schema = yup
+  .object({
+    name: yup
+      .string("فرمت وارد شده نامعتبر است")
+      .min(5, "حداقل 5 کاراکتر وارد کنید")
+      .max(30, "حداکثر 30 کاراکتر وارد کنید")
+      .required("نام و نام خانوادگی اجباری است"),
+    email: yup
+      .string("فرمت وارد شده نامعتبر است")
+      .email("ایمیل نامعتبر است")
+      .required("ایمیل اجباری است"),
+    password: yup.string("فرمت وارد شده نامعتبر است").required("رمز عبور اجباری است"),
+  })
+  .required();
+
+// export const metadata = {
+//   title: "ثبت نام",
+// };
+
+function Signup() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isLoading },
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onTouched",
+  });
+
+  const router = useRouter();
+
+  const onSubmit = async (values) => {
+    try {
+      console.log(values);
+      const { user, message } = await signupAPI(values);
+      toast.success(message);
+      console.log({ user, message });
+      router.push("/profile");
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      console.log(error);
+    }
+  };
+
+  return (
+    <div>
+      <h1 className="text-xl font-bold text-secondary-500 text-center mb-6">ثبت نام</h1>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
+        <RHFTextField
+          label="نام و نام خانوادگی"
+          name="name"
+          register={register}
+          isRequired
+          errors={errors}
+        />
+        <RHFTextField
+          label="ایمیل"
+          name="email"
+          register={register}
+          dir="ltr"
+          isRequired
+          errors={errors}
+        />
+        <RHFTextField
+          label="رمز عبور"
+          name="password"
+          register={register}
+          type="password"
+          dir="ltr"
+          isRequired
+          errors={errors}
+        />
+        <Button type="submit" variant="primary" className="w-full">
+          تایید
+        </Button>
+      </form>
+    </div>
+  );
+}
+
+export default Signup;
