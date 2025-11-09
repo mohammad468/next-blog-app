@@ -5,9 +5,8 @@ import RHFTextField from "@/ui/RHFTextField";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { signupAPI } from "@/services/authService";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import SpinnerMini from "@/ui/SpinnerMini";
 
 const schema = yup
   .object({
@@ -24,10 +23,6 @@ const schema = yup
   })
   .required();
 
-// export const metadata = {
-//   title: "ثبت نام",
-// };
-
 function Signup() {
   const {
     register,
@@ -38,19 +33,10 @@ function Signup() {
     mode: "onTouched",
   });
 
-  const router = useRouter();
+  const { signup } = useAuth();
 
   const onSubmit = async (values) => {
-    try {
-      console.log(values);
-      const { user, message } = await signupAPI(values);
-      toast.success(message);
-      console.log({ user, message });
-      router.push("/profile");
-    } catch (error) {
-      toast.error(error?.response?.data?.message);
-      console.log(error);
-    }
+    await signup(values);
   };
 
   return (
@@ -81,9 +67,15 @@ function Signup() {
           isRequired
           errors={errors}
         />
-        <Button type="submit" variant="primary" className="w-full">
-          تایید
-        </Button>
+        <div className="flex justify-center">
+          {isLoading ? (
+            <SpinnerMini />
+          ) : (
+            <Button type="submit" variant="primary" className="w-full">
+              تایید
+            </Button>
+          )}
+        </div>
       </form>
     </div>
   );
