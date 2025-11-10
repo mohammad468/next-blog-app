@@ -92,12 +92,11 @@ export default function AuthProvider({ children }) {
     dispatch({ type: "loading" });
     try {
       const { user } = await getUserAPI();
-      console.log({ user });
       dispatch({ type: "user/loaded", payload: user });
     } catch (error) {
       const errorMsg = error?.response?.data?.message;
       dispatch({ type: "rejected", payload: errorMsg });
-      toast.error(errorMsg);
+      // toast.error(errorMsg);
     }
   }
 
