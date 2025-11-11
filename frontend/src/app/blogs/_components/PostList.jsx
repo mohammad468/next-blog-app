@@ -6,6 +6,8 @@ import Avatar from "@/ui/Avatar";
 import Author from "./Author";
 import PostInteraction from "./PostInteraction";
 import { getPosts } from "@/services/postServices";
+import setCookieOnReq from "@/utils/setCookieOnReq";
+import { cookies } from "next/headers";
 
 const styles = {
   container: "grid grid-cols-12 gap-8",
@@ -13,7 +15,9 @@ const styles = {
 };
 
 async function PostList() {
-  const posts = await getPosts();
+  const cookieStore = cookies();
+  const options = setCookieOnReq(cookieStore);
+  const posts = await getPosts(options);
 
   if (!posts.length) return null;
 
