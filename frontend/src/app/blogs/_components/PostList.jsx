@@ -2,23 +2,15 @@ import Link from "next/link";
 
 import CoverImage from "./CoverImage";
 import { ClockIcon } from "@heroicons/react/24/outline";
-import Avatar from "@/ui/Avatar";
 import Author from "./Author";
 import PostInteraction from "./PostInteraction";
-import { getPosts } from "@/services/postServices";
-import setCookieOnReq from "@/utils/setCookieOnReq";
-import { cookies } from "next/headers";
 
 const styles = {
   container: "grid grid-cols-12 gap-8",
   card: "col-span-12 sm:col-span-6 lg:col-span-4 border border-secondary-300 p-2 rounded-lg",
 };
 
-async function PostList() {
-  const cookieStore = cookies();
-  const options = setCookieOnReq(cookieStore);
-  const posts = await getPosts(options);
-
+async function PostList({ posts }) {
   if (!posts.length) return null;
 
   return (
