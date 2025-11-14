@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getPostBySlug, getPosts } from "@/services/postServices";
+import RelatedPost from "../_components/RelatedPost";
 
 export const dynamicParams = false;
 
@@ -38,7 +39,7 @@ async function SinglePost({ params }) {
           src={post.coverImageUrl}
         />
       </div>
-      {/* {post.related.length > 0 ? <RelatedPost posts={post.related} /> : null} */}
+      {post.related.length > 0 && <RelatedPost posts={post.related} />}
       {/* <BlogComments post={post} /> */}
     </div>
   );
