@@ -1,3 +1,5 @@
+"use client";
+
 import Avatar from "@/ui/Avatar";
 import Button from "@/ui/Button";
 import { ArrowUturnRightIcon } from "@heroicons/react/24/outline";
@@ -21,7 +23,7 @@ function Comment({ comment, onAddComment }) {
         <div>
           {comment.openToComment && (
             <Button
-            //   onClick={onAddComment}
+              onClick={onAddComment}
               variant="secondary"
               className="text-sm flex gap-x-1 p-1 rounded-lg text-secondary-500 bg-secondary-200"
             >
