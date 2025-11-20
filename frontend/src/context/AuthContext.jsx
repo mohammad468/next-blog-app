@@ -100,6 +100,10 @@ export default function AuthProvider({ children }) {
     }
   }
 
+  async function logout() {
+    console.log("logged out");
+  }
+
   useEffect(() => {
     async function fetchData() {
       await getUser();
@@ -108,7 +112,7 @@ export default function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, isLoading, error, signin, signup }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, isLoading, error, signin, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );
