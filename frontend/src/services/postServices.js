@@ -11,9 +11,9 @@ export async function getPostBySlug(slug) {
 export async function getPosts(queries, options) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/post/list?${queries}`, options);
   const { data } = await res.json();
-  const { posts } = await data;
+  const { posts, totalPages } = await data;
 
-  return posts;
+  return { posts, totalPages };
 }
 
 export async function likePostAPI(postId) {

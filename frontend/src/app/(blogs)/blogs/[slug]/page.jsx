@@ -7,7 +7,7 @@ import PostComment from "../_components/comment/PostComment";
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const posts = await getPosts();
+  const { posts } = await getPosts();
   const slugs = posts.map((post) => {
     return { slug: post.slug };
   });
