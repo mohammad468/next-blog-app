@@ -10,7 +10,7 @@ import Breadcrumbs from "@/ui/Breadcrumbs";
 
 let breadcrumbs = [];
 breadcrumbs.push({ label: "پروفایل", href: "/profile" });
-breadcrumbs.push({ label: "پست ها", href: "/profile/posts" });
+breadcrumbs.push({ label: "پست ها", href: "/profile/posts", active: true });
 
 async function Page({ searchParams }) {
   const query = queryString.stringify(searchParams);

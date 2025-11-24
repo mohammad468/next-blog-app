@@ -6,7 +6,7 @@ import LatestPosts from "./_components/LatestPosts";
 import Breadcrumbs from "@/ui/Breadcrumbs";
 
 let breadcrumbs = [];
-breadcrumbs.push({ label: "پروفایل", href: "/profile" });
+breadcrumbs.push({ label: "پروفایل", href: "/profile", active: true });
 
 async function Profile() {
   return (
