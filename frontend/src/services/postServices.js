@@ -28,3 +28,11 @@ export async function bookmarkPostAPI(postId) {
 export async function createPostAPI(data) {
   return http.post("/post/create", data).then(({ data }) => data.data);
 }
+
+export async function editPostAPI({ id, data }) {
+  return http.patch(`/post/update/${id}`, data).then(({ data }) => data.data);
+}
+
+export async function getPostById(id) {
+  return http.get(`/post/${id}`).then(({ data }) => data.data);
+}
