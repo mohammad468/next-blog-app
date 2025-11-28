@@ -1,4 +1,5 @@
 import Breadcrumbs from "@/ui/Breadcrumbs";
+import CreatePostForm from "./_/CreatePostForm";
 
 let breadcrumbs = [];
 breadcrumbs.push({ label: "پروفایل", href: "/profile" });
@@ -9,6 +10,7 @@ function Page() {
   return (
     <div>
       <Breadcrumbs breadcrumbs={breadcrumbs} />
+      <CreatePostForm />
     </div>
   );
 }

@@ -9,7 +9,8 @@ export async function getPostBySlug(slug) {
 }
 
 export async function getPosts(queries, options) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/post/list?${queries}`, options);
+  const search = queries ? `?${queries}` : "";
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/post/list${search}`, options);
   const { data } = await res.json();
   const { posts, totalPages } = await data;
 
@@ -22,4 +23,8 @@ export async function likePostAPI(postId) {
 
 export async function bookmarkPostAPI(postId) {
   return http.post(`/post/bookmark/${postId}`).then(({ data }) => data.data);
+}
+
+export async function createPostAPI(data) {
+  return http.post("/post/create", data).then(({ data }) => data.data);
 }

@@ -25,7 +25,7 @@ function Header() {
         <span className="text-sm lg:text-lg font-bold text-secondary-700">سلام؛ {user?.name}</span>
 
         <Link href="/profile">
-          <Avatar src={user?.avatarUrl} />
+          <Avatar src={user?.avatarUrl} alt={user?.name || "profile avatar"} />
         </Link>
 
         <Drawer open={isOpenDrawer} onClose={() => setIsOpenDrawer(false)}>
