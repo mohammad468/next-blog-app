@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 
 async function EditPage({ params: { postId } }) {
   const { post } = await getPostById(postId);
-  console.log(post);
   if (!post) notFound();
 
   return (
@@ -17,7 +16,7 @@ async function EditPage({ params: { postId } }) {
           { label: "ویرایش پست", href: `/profile/posts/${postId}/edit`, active: true },
         ]}
       />
-      <CreatePostForm />
+      <CreatePostForm postToEdit={post} />
     </div>
   );
 }

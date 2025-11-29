@@ -15,6 +15,8 @@ import * as yup from "yup";
 import useCreatePost from "./useCreatePost";
 import SpinnerMini from "@/ui/SpinnerMini";
 import { useRouter } from "next/navigation";
+import useEditPost from "./useEditPost";
+import { imageUrlToFile } from "@/utils/fileFormatter";
 
 const schema = yup
   .object({
@@ -32,11 +34,38 @@ const schema = yup
   })
   .required();
 
-function CreatePostForm() {
+function CreatePostForm({ postToEdit = {} }) {
+  const { _id: editId } = postToEdit;
+  const isEditSession = Boolean(editId);
+  const {
+    title,
+    text,
+    slug,
+    briefText,
+    readingTime,
+    category,
+    coverImage,
+    coverImageUrl: prevCoverImageUrl,
+  } = postToEdit;
+
+  let editValues = {};
+
+  if (isEditSession) {
+    editValues.title = title;
+    editValues.text = text;
+    editValues.slug = slug;
+    editValues.briefText = briefText;
+    editValues.readingTime = readingTime;
+    editValues.category = category._id;
+    editValues.coverImage = coverImage;
+  }
+
   const { isLoading, categories } = useCategories();
-  const [coverImageUrl, setCoverImageUrl] = useState(null);
+  const [coverImageUrl, setCoverImageUrl] = useState(isEditSession ? prevCoverImageUrl : null);
 
   const { createPost, isCreating } = useCreatePost();
+  const { editPost, isEditing } = useEditPost();
+
   const router = useRouter();
 
   useEffect(() => {
@@ -55,7 +84,18 @@ function CreatePostForm() {
   } = useForm({
     mode: "onTouched",
     resolver: yupResolver(schema),
+    defaultValues: editValues,
   });
+
+  useEffect(() => {
+    if (prevCoverImageUrl) {
+      async function fetchMyAPI() {
+        const file = await imageUrlToFile(prevCoverImageUrl);
+        setValue("coverImage", file);
+      }
+      fetchMyAPI();
+    }
+  }, [editId]);
 
   const onSubmit = (data) => {
     const formData = new FormData();
@@ -69,11 +109,22 @@ function CreatePostForm() {
       formData.append(key, value);
     });
 
-    createPost(formData, {
-      onSuccess: () => {
-        router.push("/profile/posts");
-      },
-    });
+    isEditSession &&
+      editPost(
+        { id: editId, data: formData },
+        {
+          onSuccess: () => {
+            router.push("/profile/posts");
+          },
+        }
+      );
+
+    !isEditSession &&
+      createPost(formData, {
+        onSuccess: () => {
+          router.push("/profile/posts");
+        },
+      });
   };
 
   return (
