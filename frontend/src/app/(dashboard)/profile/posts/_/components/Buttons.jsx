@@ -1,8 +1,13 @@
 "use client";
 
 import ButtonIcon from "@/ui/ButtonIcon";
+import ConfirmDelete from "@/ui/ConfirmDelete";
+import Modal from "@/ui/Modal";
 import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { notFound, useRouter } from "next/navigation";
+import { useState } from "react";
+import useDeletePost from "../useDeletePost";
 
 export function CreatePost() {
   return (
@@ -16,11 +21,40 @@ export function CreatePost() {
   );
 }
 
-export function DeletePost({ id }) {
+export function DeletePost({ post }) {
+  const [open, setOpen] = useState(false);
+  const { isDeleting, deletePost } = useDeletePost();
+  const router = useRouter();
+
+  if (!post) {
+    notFound();
+  }
+
   return (
-    <ButtonIcon variant="outline" onClick={() => console.log(id)}>
-      <TrashIcon className="text-error" />
-    </ButtonIcon>
+    <>
+      <ButtonIcon variant="outline" onClick={() => setOpen(true)}>
+        <TrashIcon className="text-error" />
+      </ButtonIcon>
+      <Modal title="حذف پست" open={open} onClose={() => setOpen(false)}>
+        <ConfirmDelete
+          resourceName={post.title}
+          onClose={() => setOpen(false)}
+          disabled={isDeleting}
+          onConfirm={(event) => {
+            event.preventDefault();
+            deletePost(
+              { id: post._id, options: {} },
+              {
+                onSuccess: () => {
+                  setOpen(false);
+                  router.refresh("/profile/posts");
+                },
+              }
+            );
+          }}
+        />
+      </Modal>
+    </>
   );
 }
 

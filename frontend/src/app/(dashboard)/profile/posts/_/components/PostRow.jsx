@@ -29,7 +29,7 @@ function PostRow({ post, index }) {
       </td>
       <td>
         <div className="flex items-center gap-x-3">
-          <DeletePost id={post._id} />
+          <DeletePost post={post} />
           <UpdatePost id={post._id} />
         </div>
       </td>
