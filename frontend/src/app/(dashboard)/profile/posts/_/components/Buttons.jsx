@@ -8,6 +8,7 @@ import Link from "next/link";
 import { notFound, useRouter } from "next/navigation";
 import { useState } from "react";
 import useDeletePost from "../useDeletePost";
+import useDeleteComment from "../useDeleteComment";
 
 export function CreatePost() {
   return (
@@ -61,6 +62,51 @@ export function DeletePost({ post }) {
 export function UpdatePost({ id }) {
   return (
     <Link href={`/profile/posts/${id}/edit`}>
+      <ButtonIcon variant="outline">
+        <PencilIcon />
+      </ButtonIcon>
+    </Link>
+  );
+}
+
+export function DeleteComment({ comment }) {
+  const [open, setOpen] = useState(false);
+  const { isDeleting, deleteComment } = useDeleteComment();
+  if (!comment) {
+    notFound();
+  }
+  const router = useRouter();
+  return (
+    <>
+      <ButtonIcon variant="outline" onClick={() => setOpen(true)}>
+        <TrashIcon />
+      </ButtonIcon>
+      <Modal title="حذف نظر" open={open} onClose={() => setOpen(false)}>
+        <ConfirmDelete
+          resourceName={comment.content.text}
+          onClose={() => setOpen(false)}
+          disabled={isDeleting}
+          onConfirm={(event) => {
+            event.preventDefault();
+            deleteComment(
+              { id: comment._id, options: {} },
+              {
+                onSuccess: () => {
+                  setOpen(false);
+                  router.refresh("/profile/comments");
+                },
+              }
+            );
+          }}
+        />
+      </Modal>
+    </>
+  );
+}
+
+export function UpdateComment({ id }) {
+  return (
+    <Link href={`/profile/comments/${id}/edit`}>
       <ButtonIcon variant="outline">
         <PencilIcon />
       </ButtonIcon>
