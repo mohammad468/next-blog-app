@@ -1,5 +1,6 @@
 import vazirFont from "@/constants/localFont";
 import AuthProvider from "@/context/AuthContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import "@/styles/globals.css";
 import { Toaster } from "react-hot-toast";
@@ -14,12 +15,26 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="fa" dir="rtl" className="dark-mode">
+    <html lang="fa" dir="rtl" className="dark-mode" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                const theme = localStorage.getItem('theme') || 'dark-mode';
+                document.documentElement.className = theme;
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className={`${vazirFont.variable} font-sans min-h-screen`}>
         <Toaster />
-        <ReactQueryProvider>
-          <AuthProvider>{children}</AuthProvider>
-        </ReactQueryProvider>
+        <ThemeProvider>
+          <ReactQueryProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </ReactQueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

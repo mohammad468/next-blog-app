@@ -1,8 +1,10 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
+import { useTheme } from "@/context/ThemeContext";
 import NavLink from "./NavLink";
-// import { useAuth } from "@/context/AuthContext";
+import ButtonIcon from "@/ui/ButtonIcon";
+import { SunIcon, MoonIcon } from "@heroicons/react/24/outline";
 
 const navLinks = [
   {
@@ -19,6 +21,7 @@ const navLinks = [
 
 function Header() {
   const { user, isLoading } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <header
@@ -37,13 +40,20 @@ function Header() {
               );
             })}
           </div>
-          <li>
-            {user ? (
-              <NavLink path="/profile">پروفایل</NavLink>
-            ) : (
-              <NavLink path="/signin">ورود</NavLink>
-            )}
-          </li>
+          <div className="flex items-center gap-x-4">
+            <li>
+              <ButtonIcon variant="outline" onClick={toggleTheme} title={theme === "dark-mode" ? "روشن" : "تاریک"}>
+                {theme === "dark-mode" ? <SunIcon /> : <MoonIcon />}
+              </ButtonIcon>
+            </li>
+            <li>
+              {user ? (
+                <NavLink path="/profile">پروفایل</NavLink>
+              ) : (
+                <NavLink path="/signin">ورود</NavLink>
+              )}
+            </li>
+          </div>
         </ul>
       </nav>
     </header>
